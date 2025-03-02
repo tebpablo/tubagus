@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tubagus Porto - Website</title>
+    <style>
+        #about .full-text {
+            display: none; /* Teks lengkap disembunyikan secara default */
+        }
+        #about .short-text {
+            display: block; /* Teks pendek ditampilkan secara default */
+        }
+        #about.expanded .full-text {
+            display: block; /* Teks lengkap ditampilkan saat expanded */
+        }
+        #about.expanded .short-text {
+            display: none; /* Teks pendek disembunyikan saat expanded */
+        }
+        #about .see-more-btn, #about .see-less-btn {
+            color: #680707;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 16px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        #about .see-less-btn {
+            display: none; /* Tombol "See Less" disembunyikan secara default */
+        }
+        #about.expanded .see-more-btn {
+            display: none; /* Tombol "See More" disembunyikan saat expanded */
+        }
+        #about.expanded .see-less-btn {
+            display: inline-block; /* Tombol "See Less" ditampilkan saat expanded */
+        }
+        body {
+            font-family: "Space Mono", sans-serif;
+            background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+        }
+        header {
+            background-color: #660000;
+            color: rgb(248, 248, 248);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/dark-mosaic.png');
+            opacity: 0.1;
+        }
+        .relative-container {
+            position: relative;
+            height: auto;
+            padding: 20px 10px;
+        }
+        h1 {
+            position: static;
+            font-family: "Bebas neue", sans-serif;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            
+        }
+        header img {
+            position: static;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            margin: 0 auto;
+            display: block;
+        }
+        header img:hover {
+            transform: scale(1.05);
+        }
+        header p {
+            position: static;
+            max-width: 100%;
+            margin: 10px auto;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        nav {
+            background: #420202;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        nav ul {
+            list-style: none;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            display: inline; /* Restored to original inline layout */
+            margin: 0 15px; /* Reduced margin for mobile fit */
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 15px; /* Slightly smaller padding */
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        nav ul li a:hover {
+            background: #680707;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(104, 7, 7, 0.7);
+        }
+        section {
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 100%;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            font-family: "Poppins", sans-serif;
+            font-size: 24px;
+            color: #680707;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background: #680707;
+            border-radius: 2px;
+        }
+        #projects .project-card {
+            display: flex;
+            flex-direction: column;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        #projects .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        #projects img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            margin: 0 0 15px 0;
+            transition: transform 0.3s;
+        }
+        #projects img:hover {
+            transform: scale(1.03);
+        }
+        #projects .project-card h3 {
+            font-family: "Poppins", sans-serif;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        #projects .project-card p {
+            font-size: 14px;
+            color: #666;
+        }
+        #skills ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0;
+        }
+        #skills li {
+            background: #680707;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        #skills li:hover {
+            background: #9b0b0b;
+            transform: scale(1.1);
+        }
+        footer {
+            background: linear-gradient(to right, #680707, #9b0b0b);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+        a {
+            color: #680707;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #9b0b0b;
+            text-decoration: underline;
+        }
+
+        /* Media Queries for Desktop */
+        @media (min-width: 768px) {
+            .relative-container {
+                height: 200px;
+                padding: 40px 20px;
+            }
+            h1 {
+                position: absolute;
+                top: 50px;
+                left: 300px;
+                font-size: 40px;
+            }
+            header img {
+                position: absolute;
+                top: 80px;
+                left: 50px;
+                width: 180px;
+                height: 180px;
+            }
+            header p {
+                position: absolute;
+                top: 130px;
+                left: 380px;
+                max-width: 800px;
+                font-size: 18px;
+            }
+            nav ul li {
+                margin: 0 25px; /* Original margin for desktop */
+            }
+            nav ul li a {
+                font-size: 18px;
+                padding: 10px 20px; /* Original padding for desktop */
+            }
+            section {
+                padding: 40px 20px;
+                max-width: 1000px;
+            }
+            #projects .project-card {
+                flex-direction: row;
+                align-items: center;
+            }
+            #projects img {
+                width: 300px;
+                margin-right: 20px;
+            }
+            h2 {
+                font-size: 32px;
+            }
+            #skills li {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cabin:ital,wght@0,400..700;1,400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="relative-container">
+        <h1>Hello! I'm Tubagus Muchammad Dzaky Nashrullah Sutalaksana</h1>
+        <img src="images/WhatsApp Image 2025-03-02 at 10.53.06.jpeg" alt="Profil Tubagus Muchammad Dzaky Nashrullah Sutalaksana">
+        <p>Creative & Passionate Graphic Designer Creating captivating, innovative, and impactful visual designs, transforming ideas into compelling works.</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About Me!</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+    <section id="about">
+        <h2>About Me!</h2>
+        <!-- Teks pendek yang ditampilkan awalnya -->
+        <p class="short-text text-justify">Halo! Salam kenal, nama saya Tubagus Muchammad Dzaky Nashrullah Sutalaksana, lahir di Bandung pada 21 Maret 2006, seorang individu kreatif dengan pengalaman di bidang desain grafis.</p>
+        <!-- Teks lengkap yang disembunyikan -->
+        <p class="full-text text-justify">Halo! Salam kenal, nama saya Tubagus Muchammad Dzaky Nashrullah Sutalaksana, lahir di Bandung pada 21 Maret 2006, merupakan individu kreatif dengan pengalaman di bidang desain grafis. 
+            Saya menyelesaikan pendidikan SMA pada tahun 2024. Sekarang saya sedang melanjutkan pendidikan di Telkom University Bandung dengan prodi S1 sistem informasi. Pada tahun 2021, saya bekerja sebagai freelancer membantu mahasiswa Arsitektur (UNPAR) menyelesaikan Tugas Akhir, dengan fokus pada desain gambar teknis dan visualisasi proyek, 
+            yang memperkuat kemampuan kolaborasi dan ketelitian saya. Sejak 2023 hingga saat ini, saya bekerja sebagai desainer grafis untuk sebuah brand pakaian, merancang desain inovatif yang mendukung identitas brand 
+            dan meningkatkan daya tarik produk di pasar, sambil menguasai perangkat lunak seperti Adobe Photoshop dan Illustrator. Dengan kreativitas tinggi, kemampuan manajemen waktu, dan pengalaman mendukung proyek berbasis tenggat waktu, 
+            saya siap berkontribusi dalam lingkungan kerja yang dinamis sambil terus mengembangkan keterampilan di bidang desain.</p>
+        <!-- Tombol See More dan See Less -->
+        <span class="see-more-btn">See More</span>
+        <span class="see-less-btn">See Less</span>
+    </section>
+
+    <section id="skills">
+        <h2>Skills</h2>
+        <ul>
+            <li>Menggambar</li>
+            <li>Menggunakan Photoshop</li>
+            <li>Kreatif</li>
+        </ul>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <div class="project-card">
+            <img src="images/Sacred-Tears-.jpg" alt="Sacred Tears">
+            <div>
+                <h3>Sacred Tears - 2023</h3>
+                <p>Sebuah karya yang mengeksplorasi emosi mendalam melalui visual yang kuat.</p>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="images/part-2-front.png" alt="Bastard Brothers">
+            <div>
+                <h3>Bastard Brothers - 2024</h3>
+                <p>Desain pakaian dengan tema persaudaraan dan kekuatan.</p>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="images/part-2.png" alt="Bastard Skull">
+            <div>
+                <h3>Bastard Skull - 2024</h3>
+                <p>Karya seni yang menggabungkan elemen tengkorak dengan sentuhan goth.</p>
+            </div>
+        </div>
+        <div class="project-card">
+            <img src="images/VOLUME 1 (prototype 2).png" alt="Machitis -2022">
+            <div>
+                <h3>Machitis - 2022</h3>
+                <p>Desain pakaian yang menggabungkan elemen distro dengan sentuhan modern.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:nashrulahdzaky@gmail.com">nashrulahdzaky@gmail.com</a></p>
+        <p>Instagram: <a href="https://www.instagram.com/tb.dzk/" target="_blank">tb.dzk</a></p>
+    </section>
+
+    <footer>
+        <p>© 2025 Tubagus Muchammad Dzaky Nashrullah Sutalaksana. Semua hak dilindungi.</p>
+    </footer>
+    <!-- JavaScript untuk mengontrol "See More" -->
+    <script>
+        document.querySelector('.see-more-btn').addEventListener('click', function() {
+            document.getElementById('about').classList.add('expanded');
+        });
+        document.querySelector('.see-less-btn').addEventListener('click', function() {
+            document.getElementById('about').classList.remove('expanded');
+        });
+    </script>
+</body>
+</html>
